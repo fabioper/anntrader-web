@@ -7,11 +7,26 @@ const config: Config = {
     './app/**/*.{js,ts,jsx,tsx,mdx}',
   ],
   theme: {
+    container: {
+      center: true,
+      padding: '1rem',
+    },
+    colors: {
+      primary: 'var(--primary-color)',
+      'text-color': 'var(--text-color)',
+      'text-color-secondary': 'var(--text-color-secondary)',
+      'surface-card': 'var(--surface-card)',
+      'surface-border': 'var(--surface-border)',
+      'surface-overlay': 'var(--surface-overlay)',
+      'surface-a': 'var(--surface-a)',
+      'surface-b': 'var(--surface-b)',
+      'surface-c': 'var(--surface-c)',
+      'surface-d': 'var(--surface-d)',
+      'primary-color-text': 'var(--primary-color-text)',
+    },
     extend: {
-      backgroundImage: {
-        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
-        'gradient-conic':
-          'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
+      fontFamily: {
+        sans: 'var(--font-inter)',
       },
     },
   },
