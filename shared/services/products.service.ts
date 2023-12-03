@@ -16,3 +16,8 @@ export async function getProducts() {
   const { data } = await api.get<Product[]>('/products')
   return data
 }
+
+export async function getProductBy(productId: string) {
+  const { data } = await api.get<Product>(`/products/${productId}`)
+  return data
+}

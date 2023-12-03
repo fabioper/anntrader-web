@@ -24,7 +24,10 @@ export default async function HomePage() {
                   height={250}
                 />
               )}
-              <h3 className="font-bold">{product.name}</h3>
+              <div className="flex justify-between items-center">
+                <h3 className="font-bold">{product.name}</h3>
+                <span>${product.price}</span>
+              </div>
               <p className="text-sm">{product.description}</p>
               <div className="flex justify-end">
                 <Link href={`/${product.id}`}>
