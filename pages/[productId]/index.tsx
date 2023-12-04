@@ -1,18 +1,11 @@
-'use client'
-
 import { getProductById } from '@/shared/services/products.service'
 import React, { useCallback, useEffect, useState } from 'react'
 import { Product } from '@/shared/models/product'
-import { notFound } from 'next/navigation'
 import Image from 'next/image'
+import { useRouter } from 'next/router'
+import Head from 'next/head'
 
-interface ProductDetailsPageProps {
-  params: { productId: string }
-}
-
-export default function ProductDetailsPage({
-  params: { productId },
-}: ProductDetailsPageProps) {
+function useProduct(productId: string | undefined) {
   const [product, setProduct] = useState<Product>()
   const [loading, setLoading] = useState(true)
 
@@ -29,14 +22,24 @@ export default function ProductDetailsPage({
 
   useEffect(() => {
     ;(async () => {
-      await loadProduct(productId)
+      if (productId) {
+        await loadProduct(productId)
+      }
     })()
 
     return () => setProduct(undefined)
   }, [loadProduct, productId])
 
+  return { product, loading }
+}
+
+export default function ProductDetailsPage() {
+  const router = useRouter()
+  const { productId } = router.query as Partial<{ productId: string }>
+  const { product, loading } = useProduct(productId)
+
   if (!product && !loading) {
-    return notFound()
+    return <div className="container">Product not found</div>
   }
 
   if (!product) {
@@ -45,6 +48,10 @@ export default function ProductDetailsPage({
 
   return (
     <main>
+      <Head>
+        <title>{product.name} | ANN Trader</title>
+      </Head>
+
       <div className="container flex flex-col md:flex-row gap-10">
         {product.image && (
           <Image

@@ -13,4 +13,4 @@ function Header() {
   )
 }
 
-export default React.cache(Header)
+export default Header

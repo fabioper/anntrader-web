@@ -1,9 +1,8 @@
-'use client'
-
 import { getProductsByQuery } from '@/shared/services/products.service'
-import ProductsList from '@/app/products-list'
 import React, { useCallback, useState } from 'react'
 import { Product } from '@/shared/models/product'
+import ProductsList from '@/shared/components/products-list'
+import Head from 'next/head'
 
 export default function HomePage() {
   const [products, setProducts] = useState<Product[]>([])
@@ -32,6 +31,10 @@ export default function HomePage() {
 
   return (
     <main>
+      <Head>
+        <title>ANN Trader</title>
+      </Head>
+
       <div className="container">
         <h2 className="font-bold text-xl mb-5">Products</h2>
 
