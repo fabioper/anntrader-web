@@ -2,7 +2,7 @@ import axios from 'axios'
 import { Product } from '@/shared/models/product'
 
 const api = axios.create({
-  baseURL: 'http://localhost:3000',
+  baseURL: process.env.NEXT_PUBLIC_API_URL,
 })
 
 export async function getProductsByQuery(query: string) {

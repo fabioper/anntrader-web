@@ -37,8 +37,8 @@ function ProductsList({ products, loading }: ProductsListProps) {
           <p className="text-sm">{product.description}</p>
           <div className="flex justify-end">
             <Link href={`/${product.id}`}>
-              <button className="px-10 py-2 bg-teal-500 text-white rounded shadow">
-                Detalhes
+              <button className="px-10 py-2 bg-teal-500 text-white rounded shadow text-sm">
+                View details
               </button>
             </Link>
           </div>
