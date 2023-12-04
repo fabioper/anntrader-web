@@ -28,11 +28,14 @@ function ProductsList({ products, loading }: ProductsListProps) {
               alt={product.description}
               width={250}
               height={250}
+              className="w-full max-h-56 object-contain"
             />
           )}
           <div className="flex justify-between items-center">
             <h3 className="font-bold">{product.name}</h3>
-            <span>${product.price}</span>
+            <span className="text-teal-500 font-bold text-xl">
+              ${product.price}
+            </span>
           </div>
           <p className="text-sm">{product.description}</p>
           <div className="flex justify-end">
