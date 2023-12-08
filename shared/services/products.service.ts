@@ -5,7 +5,7 @@ const api = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL,
 })
 
-export async function getProductsByQuery(query: string) {
+export async function getProductsByQuery(query?: string) {
   const { data } = await api.get<Product[]>('/products', {
     params: { search: query },
   })

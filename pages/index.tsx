@@ -1,5 +1,5 @@
 import { getProductsByQuery } from '@/shared/services/products.service'
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { Product } from '@/shared/models/product'
 import ProductsList from '@/shared/components/products-list'
 import Head from 'next/head'
@@ -9,7 +9,7 @@ export default function HomePage() {
   const [query, setQuery] = useState<string>('')
   const [loading, setLoading] = useState(false)
 
-  const loadProducts = useCallback(async (query: string) => {
+  const loadProducts = useCallback(async (query?: string) => {
     setLoading(true)
     try {
       const productsData = await getProductsByQuery(query)
@@ -28,6 +28,10 @@ export default function HomePage() {
     },
     [loadProducts, query],
   )
+
+  useEffect(() => {
+    ;(async () => loadProducts())()
+  }, [loadProducts])
 
   return (
     <main>
