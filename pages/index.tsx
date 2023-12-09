@@ -85,6 +85,16 @@ export default function HomePage() {
               setLoading(false)
             }
           }}
+          onProductUpdate={async () => {
+            try {
+              setLoading(true)
+              await loadProducts(query)
+            } catch (e) {
+              console.error(e)
+            } finally {
+              setLoading(false)
+            }
+          }}
         />
 
         <SaveProductModal

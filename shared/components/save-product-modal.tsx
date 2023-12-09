@@ -1,5 +1,5 @@
 import { Dialog } from 'primereact/dialog'
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { Button } from 'primereact/button'
 import { PrimeIcons } from 'primereact/api'
 import { InputText } from 'primereact/inputtext'
@@ -7,25 +7,55 @@ import { InputTextarea } from 'primereact/inputtextarea'
 import { InputNumber } from 'primereact/inputnumber'
 import { useForm } from 'react-hook-form'
 import { CreateProductDto } from '@/shared/dtos/create-product.dto'
-import { createProduct } from '@/shared/services/products.service'
+import {
+  createProduct,
+  getProductById,
+  updateProduct,
+} from '@/shared/services/products.service'
 
 export interface SaveProductModalProps {
   visible: boolean
   onHide: () => void
+  productId?: string
 }
 
-function SaveProductModal({ visible, onHide }: SaveProductModalProps) {
+function SaveProductModal({
+  visible,
+  onHide,
+  productId,
+}: SaveProductModalProps) {
   const { handleSubmit, register, watch, setValue, reset } =
     useForm<CreateProductDto>()
   const [loading, setLoading] = useState(false)
 
   const priceValue = watch('price')
 
+  useEffect(() => {
+    if (productId) {
+      ;(async () => {
+        const foundProduct = await getProductById(productId)
+        if (foundProduct) {
+          reset({
+            name: foundProduct.name,
+            description: foundProduct.description,
+            image: foundProduct.image,
+            price: foundProduct.price,
+          })
+        }
+      })()
+    }
+  }, [productId, reset])
+
   const onSubmit = useCallback(
     async (values: CreateProductDto) => {
       try {
         setLoading(true)
-        await createProduct(values)
+        if (!productId) {
+          await createProduct(values)
+        } else {
+          await updateProduct(productId, values)
+        }
+
         onHide()
       } catch (e) {
         console.error(e)

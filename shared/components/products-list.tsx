@@ -13,12 +13,14 @@ interface ProductsListProps {
   products: Product[]
   loading: boolean
   onProductRemove: (product: Product) => void
+  onProductUpdate: () => void
 }
 
 function ProductsList({
   products,
   loading,
   onProductRemove,
+  onProductUpdate,
 }: ProductsListProps) {
   const [selectedProduct, setSelectedProduct] = useState<Product>()
 
@@ -107,7 +109,11 @@ function ProductsList({
 
       <SaveProductModal
         visible={!!selectedProduct}
-        onHide={() => setSelectedProduct(undefined)}
+        onHide={async () => {
+          setSelectedProduct(undefined)
+          onProductUpdate()
+        }}
+        productId={selectedProduct?.id}
       />
       <ConfirmDialog />
     </div>
