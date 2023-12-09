@@ -1,9 +1,9 @@
 import axios from 'axios'
 import { Product } from '@/shared/models/product'
+import { CreateProductDto } from '@/shared/dtos/create-product.dto'
+import { UpdateProductDto } from '@/shared/dtos/update-product.dto'
 
-const api = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL,
-})
+const api = axios.create({ baseURL: process.env.NEXT_PUBLIC_API_URL })
 
 export async function getProductsByQuery(query?: string) {
   const { data } = await api.get<Product[]>('/products', {
@@ -15,4 +15,16 @@ export async function getProductsByQuery(query?: string) {
 export async function getProductById(productId: string) {
   const { data } = await api.get<Product>(`/products/${productId}`)
   return data
+}
+
+export async function createProduct(data: CreateProductDto) {
+  await api.post('/products', data)
+}
+
+export async function updateProduct(productId: string, data: UpdateProductDto) {
+  await api.put(`/products/${productId}`, data)
+}
+
+export async function deleteProduct(productId: string) {
+  await api.delete(`/products/${productId}`)
 }
