@@ -3,13 +3,11 @@
 import { Product } from '@/shared/models/product'
 import Image from 'next/image'
 import Link from 'next/link'
-import React, { useCallback, useRef } from 'react'
+import React, { useCallback, useState } from 'react'
 import { Button } from 'primereact/button'
 import { PrimeIcons } from 'primereact/api'
 import { ConfirmDialog, confirmDialog } from 'primereact/confirmdialog'
-import SaveProductModal, {
-  SaveProductModalRef,
-} from '@/shared/components/save-product-modal'
+import SaveProductModal from '@/shared/components/save-product-modal'
 
 interface ProductsListProps {
   products: Product[]
@@ -17,7 +15,7 @@ interface ProductsListProps {
 }
 
 function ProductsList({ products, loading }: ProductsListProps) {
-  const modalRef = useRef<SaveProductModalRef>(null)
+  const [selectedProduct, setSelectedProduct] = useState<Product>()
 
   const removeProduct = useCallback((product: Product) => {}, [])
 
@@ -86,7 +84,7 @@ function ProductsList({ products, loading }: ProductsListProps) {
                 icon={PrimeIcons.PENCIL}
                 tooltip="Edit product"
                 tooltipOptions={{ position: 'bottom' }}
-                onClick={modalRef.current?.open}
+                onClick={() => setSelectedProduct(product)}
               />
 
               <Button
@@ -104,7 +102,10 @@ function ProductsList({ products, loading }: ProductsListProps) {
         </div>
       ))}
 
-      <SaveProductModal ref={modalRef} />
+      <SaveProductModal
+        visible={!!selectedProduct}
+        onHide={() => setSelectedProduct(undefined)}
+      />
       <ConfirmDialog />
     </div>
   )

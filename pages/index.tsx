@@ -1,19 +1,17 @@
 import { getProductsByQuery } from '@/shared/services/products.service'
-import React, { useCallback, useEffect, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { Product } from '@/shared/models/product'
 import ProductsList from '@/shared/components/products-list'
 import Head from 'next/head'
 import { InputText } from 'primereact/inputtext'
 import { Button } from 'primereact/button'
-import SaveProductModal, {
-  SaveProductModalRef,
-} from '@/shared/components/save-product-modal'
+import SaveProductModal from '@/shared/components/save-product-modal'
 
 export default function HomePage() {
   const [products, setProducts] = useState<Product[]>([])
   const [query, setQuery] = useState<string>('')
   const [loading, setLoading] = useState(false)
-  const modalRef = useRef<SaveProductModalRef>(null)
+  const [modalVisible, setModalVisible] = useState(false)
 
   const loadProducts = useCallback(async (query?: string) => {
     setLoading(true)
@@ -64,7 +62,7 @@ export default function HomePage() {
           <Button
             type="button"
             size="small"
-            onClick={() => modalRef.current?.open()}
+            onClick={() => setModalVisible(true)}
           >
             Add product
           </Button>
@@ -72,7 +70,13 @@ export default function HomePage() {
 
         <ProductsList products={products} loading={loading} />
 
-        <SaveProductModal ref={modalRef} />
+        <SaveProductModal
+          visible={modalVisible}
+          onHide={async () => {
+            setModalVisible(false)
+            await loadProducts(query)
+          }}
+        />
       </section>
     </main>
   )

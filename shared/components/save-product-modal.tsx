@@ -1,50 +1,40 @@
 import { Dialog } from 'primereact/dialog'
-import React, {
-  ForwardedRef,
-  useCallback,
-  useImperativeHandle,
-  useMemo,
-  useState,
-} from 'react'
+import React, { useCallback, useState } from 'react'
 import { Button } from 'primereact/button'
 import { PrimeIcons } from 'primereact/api'
+import { InputText } from 'primereact/inputtext'
+import { InputTextarea } from 'primereact/inputtextarea'
+import { InputNumber } from 'primereact/inputnumber'
+import { useForm } from 'react-hook-form'
+import { CreateProductDto } from '@/shared/dtos/create-product.dto'
+import { createProduct } from '@/shared/services/products.service'
 
-export interface SaveProductModalRef {
-  open: () => void
-  hide: () => void
+export interface SaveProductModalProps {
+  visible: boolean
+  onHide: () => void
 }
 
-function SaveProductModal(_: {}, ref: ForwardedRef<SaveProductModalRef>) {
-  const [visible, setVisible] = useState(false)
+function SaveProductModal({ visible, onHide }: SaveProductModalProps) {
+  const { handleSubmit, register, watch, setValue, reset } =
+    useForm<CreateProductDto>()
+  const [loading, setLoading] = useState(false)
 
-  const onHide = useCallback(() => {
-    setVisible(false)
-  }, [])
+  const priceValue = watch('price')
 
-  useImperativeHandle(ref, () => ({
-    open() {
-      setVisible(true)
-      return ref
+  const onSubmit = useCallback(
+    async (values: CreateProductDto) => {
+      try {
+        setLoading(true)
+        await createProduct(values)
+        onHide()
+      } catch (e) {
+        console.error(e)
+      } finally {
+        setLoading(false)
+        reset()
+      }
     },
-    hide() {
-      setVisible(false)
-      return ref
-    },
-  }))
-
-  const footer = useMemo(
-    () => (
-      <div className="flex gap-1 justify-end">
-        <Button label="Cancelar" severity="info" outlined className="m-0" />
-        <Button
-          label="Confirmar"
-          severity="success"
-          icon={PrimeIcons.CHECK}
-          className="m-0"
-        />
-      </div>
-    ),
-    [],
+    [onHide, reset],
   )
 
   return (
@@ -53,11 +43,55 @@ function SaveProductModal(_: {}, ref: ForwardedRef<SaveProductModalRef>) {
       onHide={onHide}
       visible={visible}
       draggable={false}
-      footer={footer}
+      className="w-full max-w-prose"
     >
-      SaveProductModal
+      <form
+        className="flex flex-col gap-3 w-full"
+        onSubmit={handleSubmit(onSubmit)}
+      >
+        <label className="flex flex-col gap-1">
+          Nome
+          <InputText {...register('name')} />
+        </label>
+
+        <label className="flex flex-col gap-1">
+          Description
+          <InputTextarea {...register('description')} />
+        </label>
+
+        <label className="flex flex-col gap-1">
+          Price
+          <InputNumber
+            mode="currency"
+            currency="USD"
+            locale="en-US"
+            value={priceValue}
+            onValueChange={(e) => setValue('price', e.value as number)}
+          />
+        </label>
+
+        <div className="flex gap-1 justify-end">
+          <Button
+            label="Cancelar"
+            severity="info"
+            outlined
+            className="m-0"
+            type="button"
+            onClick={onHide}
+          />
+
+          <Button
+            label="Confirmar"
+            severity="success"
+            icon={PrimeIcons.CHECK}
+            className="m-0"
+            type="submit"
+            loading={loading}
+          />
+        </div>
+      </form>
     </Dialog>
   )
 }
 
-export default React.forwardRef(SaveProductModal)
+export default SaveProductModal
