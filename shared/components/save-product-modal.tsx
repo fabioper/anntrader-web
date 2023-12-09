@@ -12,6 +12,8 @@ import {
   getProductById,
   updateProduct,
 } from '@/shared/services/products.service'
+import ImageUploadInput from '@/shared/components/image-upload-input'
+import { uploadImage } from '@/shared/services/images.service'
 
 export interface SaveProductModalProps {
   visible: boolean
@@ -29,6 +31,7 @@ function SaveProductModal({
   const [loading, setLoading] = useState(false)
 
   const priceValue = watch('price')
+  const imageValue = watch('image')
 
   useEffect(() => {
     if (productId) {
@@ -64,8 +67,14 @@ function SaveProductModal({
         reset()
       }
     },
-    [onHide, reset],
+    [onHide, productId, reset],
   )
+
+  const handleImageUpload = useCallback(async (file?: File) => {
+    if (file) {
+      await uploadImage(file)
+    }
+  }, [])
 
   return (
     <Dialog
@@ -79,6 +88,15 @@ function SaveProductModal({
         className="flex flex-col gap-3 w-full"
         onSubmit={handleSubmit(onSubmit)}
       >
+        <label className="flex flex-col gap-1">
+          Imagem
+          <ImageUploadInput
+            loading={false}
+            onSelect={handleImageUpload}
+            selected={imageValue}
+          />
+        </label>
+
         <label className="flex flex-col gap-1">
           Nome
           <InputText {...register('name')} />
