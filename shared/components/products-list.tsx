@@ -12,12 +12,15 @@ import SaveProductModal from '@/shared/components/save-product-modal'
 interface ProductsListProps {
   products: Product[]
   loading: boolean
+  onProductRemove: (product: Product) => void
 }
 
-function ProductsList({ products, loading }: ProductsListProps) {
+function ProductsList({
+  products,
+  loading,
+  onProductRemove,
+}: ProductsListProps) {
   const [selectedProduct, setSelectedProduct] = useState<Product>()
-
-  const removeProduct = useCallback((product: Product) => {}, [])
 
   const confirmProductRemoval = useCallback(
     (product: Product) => {
@@ -29,10 +32,10 @@ function ProductsList({ products, loading }: ProductsListProps) {
         acceptLabel: 'Yep, delete it',
         rejectLabel: 'Never mind',
         draggable: false,
-        accept: () => removeProduct(product),
+        accept: () => onProductRemove(product),
       })
     },
-    [removeProduct],
+    [onProductRemove],
   )
 
   if (loading) {

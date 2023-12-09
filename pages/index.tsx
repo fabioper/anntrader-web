@@ -1,4 +1,7 @@
-import { getProductsByQuery } from '@/shared/services/products.service'
+import {
+  deleteProduct,
+  getProductsByQuery,
+} from '@/shared/services/products.service'
 import React, { useCallback, useEffect, useState } from 'react'
 import { Product } from '@/shared/models/product'
 import ProductsList from '@/shared/components/products-list'
@@ -68,7 +71,21 @@ export default function HomePage() {
           </Button>
         </div>
 
-        <ProductsList products={products} loading={loading} />
+        <ProductsList
+          products={products}
+          loading={loading}
+          onProductRemove={async (product) => {
+            try {
+              setLoading(true)
+              await deleteProduct(product.id)
+              await loadProducts(query)
+            } catch (e) {
+              console.error(e)
+            } finally {
+              setLoading(false)
+            }
+          }}
+        />
 
         <SaveProductModal
           visible={modalVisible}
