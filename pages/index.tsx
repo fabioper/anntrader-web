@@ -1,15 +1,19 @@
 import { getProductsByQuery } from '@/shared/services/products.service'
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { Product } from '@/shared/models/product'
 import ProductsList from '@/shared/components/products-list'
 import Head from 'next/head'
 import { InputText } from 'primereact/inputtext'
 import { Button } from 'primereact/button'
+import SaveProductModal, {
+  SaveProductModalRef,
+} from '@/shared/components/save-product-modal'
 
 export default function HomePage() {
   const [products, setProducts] = useState<Product[]>([])
   const [query, setQuery] = useState<string>('')
   const [loading, setLoading] = useState(false)
+  const modalRef = useRef<SaveProductModalRef>(null)
 
   const loadProducts = useCallback(async (query?: string) => {
     setLoading(true)
@@ -57,12 +61,18 @@ export default function HomePage() {
             </Button>
           </form>
 
-          <Button type="button" size="small">
+          <Button
+            type="button"
+            size="small"
+            onClick={() => modalRef.current?.open()}
+          >
             Add product
           </Button>
         </div>
 
         <ProductsList products={products} loading={loading} />
+
+        <SaveProductModal ref={modalRef} />
       </section>
     </main>
   )

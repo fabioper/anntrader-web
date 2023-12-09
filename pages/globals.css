@@ -27,3 +27,7 @@ body, .p-component {
 .p-button {
     @apply text-sm;
 }
+
+.p-dialog .p-dialog-header .p-dialog-title {
+    @apply font-normal text-text-color;
+}

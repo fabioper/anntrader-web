@@ -3,9 +3,13 @@
 import { Product } from '@/shared/models/product'
 import Image from 'next/image'
 import Link from 'next/link'
-import React from 'react'
+import React, { useCallback, useRef } from 'react'
 import { Button } from 'primereact/button'
 import { PrimeIcons } from 'primereact/api'
+import { ConfirmDialog, confirmDialog } from 'primereact/confirmdialog'
+import SaveProductModal, {
+  SaveProductModalRef,
+} from '@/shared/components/save-product-modal'
 
 interface ProductsListProps {
   products: Product[]
@@ -13,6 +17,26 @@ interface ProductsListProps {
 }
 
 function ProductsList({ products, loading }: ProductsListProps) {
+  const modalRef = useRef<SaveProductModalRef>(null)
+
+  const removeProduct = useCallback((product: Product) => {}, [])
+
+  const confirmProductRemoval = useCallback(
+    (product: Product) => {
+      confirmDialog({
+        header: `Are you sure you want to delete ${product.name}?`,
+        acceptIcon: PrimeIcons.TRASH,
+        acceptClassName: 'p-button-danger',
+        rejectClassName: 'p-button-outlined p-button-danger mr-2',
+        acceptLabel: 'Yep, delete it',
+        rejectLabel: 'Never mind',
+        draggable: false,
+        accept: () => removeProduct(product),
+      })
+    },
+    [removeProduct],
+  )
+
   if (loading) {
     return <div>Loading products...</div>
   }
@@ -62,6 +86,7 @@ function ProductsList({ products, loading }: ProductsListProps) {
                 icon={PrimeIcons.PENCIL}
                 tooltip="Edit product"
                 tooltipOptions={{ position: 'bottom' }}
+                onClick={modalRef.current?.open}
               />
 
               <Button
@@ -72,11 +97,15 @@ function ProductsList({ products, loading }: ProductsListProps) {
                 icon={PrimeIcons.TRASH}
                 tooltip="Delete product"
                 tooltipOptions={{ position: 'bottom' }}
+                onClick={() => confirmProductRemoval(product)}
               />
             </div>
           </div>
         </div>
       ))}
+
+      <SaveProductModal ref={modalRef} />
+      <ConfirmDialog />
     </div>
   )
 }
