@@ -65,8 +65,10 @@ export default function ProductDetailsPage() {
 
         <div className="flex flex-col gap-2">
           <h2 className="font-bold text-3xl">{product.name}</h2>
-          <span className="text-4xl text-teal-500">${product.price}</span>
-          <p className="text-sm text-slate-800">{product.description}</p>
+          <span className="text-4xl text-primary">${product.price}</span>
+          <p className="text-sm text-text-color-secondary">
+            {product.description}
+          </p>
         </div>
       </div>
     </main>

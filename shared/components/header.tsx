@@ -3,11 +3,11 @@ import Link from 'next/link'
 
 function Header() {
   return (
-    <header className="border-b border-b-slate-200 mb-10">
-      <div className="container py-5">
-        <Link href="/">
-          <h1 className="font-bold">ANN Trader</h1>
-        </Link>
+    <header className="border-b border-b-surface-border mb-10">
+      <div className="container py-5 flex items-center justify-between">
+        <h1 className="font-bold">
+          <Link href="/">ANN Trader</Link>
+        </h1>
       </div>
     </header>
   )

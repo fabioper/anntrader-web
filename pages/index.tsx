@@ -3,6 +3,8 @@ import React, { useCallback, useEffect, useState } from 'react'
 import { Product } from '@/shared/models/product'
 import ProductsList from '@/shared/components/products-list'
 import Head from 'next/head'
+import { InputText } from 'primereact/inputtext'
+import { Button } from 'primereact/button'
 
 export default function HomePage() {
   const [products, setProducts] = useState<Product[]>([])
@@ -39,27 +41,29 @@ export default function HomePage() {
         <title>ANN Trader</title>
       </Head>
 
-      <div className="container">
+      <section className="container">
         <h2 className="font-bold text-xl mb-5">Products</h2>
 
-        <form className="my-5 flex gap-2" onSubmit={searchProducts}>
-          <input
-            type="text"
-            onChange={(event) => setQuery(event.target.value)}
-            value={query}
-            placeholder="Search product"
-            className="border border-slate-300 rounded bg-slate-50 p-2 w-full max-w-prose"
-          />
-          <button
-            type="submit"
-            className="bg-teal-500 rounded px-5 text-white shadow text-sm"
-          >
-            Search
-          </button>
-        </form>
+        <div className="flex justify-between my-5">
+          <form className="flex gap-2" onSubmit={searchProducts}>
+            <InputText
+              type="text"
+              onChange={(event) => setQuery(event.target.value)}
+              value={query}
+              placeholder="Search product"
+            />
+            <Button type="submit" size="small">
+              Search
+            </Button>
+          </form>
+
+          <Button type="button" size="small">
+            Add product
+          </Button>
+        </div>
 
         <ProductsList products={products} loading={loading} />
-      </div>
+      </section>
     </main>
   )
 }
