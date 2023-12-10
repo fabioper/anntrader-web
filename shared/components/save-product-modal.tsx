@@ -14,6 +14,7 @@ import {
 } from '@/shared/services/products.service'
 import ImageUploadInput from '@/shared/components/image-upload-input'
 import { uploadImage } from '@/shared/services/images.service'
+import { useProducts } from '@/shared/contexts/products.context'
 
 export interface SaveProductModalProps {
   visible: boolean
@@ -29,6 +30,7 @@ function SaveProductModal({
   const { handleSubmit, register, watch, setValue, reset } =
     useForm<CreateProductDto>()
   const [loading, setLoading] = useState(false)
+  const { loadProducts } = useProducts()
 
   const priceValue = watch('price')
   const imageValue = watch('image')
@@ -49,27 +51,6 @@ function SaveProductModal({
     }
   }, [productId, reset])
 
-  const onSubmit = useCallback(
-    async (values: CreateProductDto) => {
-      try {
-        setLoading(true)
-        if (!productId) {
-          await createProduct(values)
-        } else {
-          await updateProduct(productId, values)
-        }
-
-        onHide()
-      } catch (e) {
-        console.error(e)
-      } finally {
-        setLoading(false)
-        reset()
-      }
-    },
-    [onHide, productId, reset],
-  )
-
   const handleImageUpload = useCallback(
     async (file?: File) => {
       if (file) {
@@ -80,10 +61,37 @@ function SaveProductModal({
     [setValue],
   )
 
+  const onSubmit = useCallback(
+    async (values: CreateProductDto) => {
+      try {
+        setLoading(true)
+        if (!productId) {
+          await createProduct(values)
+        } else {
+          await updateProduct(productId, values)
+        }
+
+        await loadProducts()
+        onHide()
+      } catch (e) {
+        console.error(e)
+      } finally {
+        setLoading(false)
+        reset()
+      }
+    },
+    [loadProducts, productId, reset],
+  )
+
+  const resetAndHide = useCallback(() => {
+    reset()
+    onHide()
+  }, [onHide, reset])
+
   return (
     <Dialog
       header="Save Product"
-      onHide={onHide}
+      onHide={resetAndHide}
       visible={visible}
       draggable={false}
       className="w-full max-w-prose"
@@ -129,7 +137,7 @@ function SaveProductModal({
             outlined
             className="m-0"
             type="button"
-            onClick={onHide}
+            onClick={resetAndHide}
           />
 
           <Button
