@@ -70,11 +70,15 @@ function SaveProductModal({
     [onHide, productId, reset],
   )
 
-  const handleImageUpload = useCallback(async (file?: File) => {
-    if (file) {
-      await uploadImage(file)
-    }
-  }, [])
+  const handleImageUpload = useCallback(
+    async (file?: File) => {
+      if (file) {
+        const url = await uploadImage(file)
+        setValue('image', url)
+      }
+    },
+    [setValue],
+  )
 
   return (
     <Dialog

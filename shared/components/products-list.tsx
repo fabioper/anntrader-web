@@ -61,11 +61,13 @@ function ProductsList({
               alt={product.description}
               width={250}
               height={250}
-              className="w-full max-h-56 object-contain"
+              className="w-full h-56 object-contain"
             />
           )}
           <div className="flex justify-between items-center">
-            <h3 className="font-bold">{product.name}</h3>
+            <Link href={`/${product.id}`} className="hover:underline">
+              <h3 className="font-bold">{product.name}</h3>
+            </Link>
             <span className="text-primary font-bold text-xl">
               ${product.price}
             </span>
@@ -73,13 +75,7 @@ function ProductsList({
 
           <p className="text-sm">{product.description}</p>
 
-          <div className="flex justify-between gap-2">
-            <Link href={`/${product.id}`}>
-              <Button size="small" outlined>
-                Open product
-              </Button>
-            </Link>
-
+          <div className="flex justify-end gap-2">
             <div className="flex gap-2">
               <Button
                 size="small"
