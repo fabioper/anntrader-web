@@ -12,7 +12,7 @@ function Header() {
   const signOut = useCallback(async () => {
     const cognitoHost = process.env.NEXT_PUBLIC_COGNITO_HOST
     const clientId = process.env.NEXT_PUBLIC_COGNITO_CLIENT_ID
-    const redirectUri = window.location.origin + '/auth/callback'
+    const redirectUri = process.env.NEXT_PUBLIC_REDIRECT_URI
     const logoutUri = `${cognitoHost}/logout?client_id=${clientId}&logout_uri=${redirectUri}&redirect_uri=${redirectUri}&response_type=code`
 
     await router.push(logoutUri)

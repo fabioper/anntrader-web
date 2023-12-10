@@ -15,6 +15,7 @@ import {
 import ImageUploadInput from '@/shared/components/image-upload-input'
 import { uploadImage } from '@/shared/services/images.service'
 import { useProducts } from '@/shared/contexts/products.context'
+import { useAuth } from 'oidc-react'
 
 export interface SaveProductModalProps {
   visible: boolean
@@ -27,6 +28,7 @@ function SaveProductModal({
   onHide,
   productId,
 }: SaveProductModalProps) {
+  const { userData } = useAuth()
   const { handleSubmit, register, watch, setValue, reset } =
     useForm<CreateProductDto>()
   const [loading, setLoading] = useState(false)
@@ -63,10 +65,14 @@ function SaveProductModal({
 
   const onSubmit = useCallback(
     async (values: CreateProductDto) => {
+      if (!userData) {
+        return
+      }
+
       try {
         setLoading(true)
         if (!productId) {
-          await createProduct(values)
+          await createProduct(values, userData.access_token)
         } else {
           await updateProduct(productId, values)
         }
@@ -80,7 +86,7 @@ function SaveProductModal({
         reset()
       }
     },
-    [loadProducts, productId, reset],
+    [loadProducts, onHide, productId, reset, userData],
   )
 
   const resetAndHide = useCallback(() => {

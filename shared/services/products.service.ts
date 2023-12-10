@@ -15,8 +15,10 @@ export async function getProductById(productId: string) {
   return data
 }
 
-export async function createProduct(data: CreateProductDto) {
-  await api.post('/products', data)
+export async function createProduct(data: CreateProductDto, token: string) {
+  await api.post('/products', data, {
+    headers: { Authorization: `Bearer ${token}` },
+  })
 }
 
 export async function updateProduct(productId: string, data: UpdateProductDto) {

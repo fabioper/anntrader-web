@@ -9,10 +9,8 @@ import Layout from '@/shared/layout/layout'
 import dynamic from 'next/dynamic'
 
 const AuthProvider = dynamic(
-  () => import('@/shared/contexts/AuthenticationProvider'),
-  {
-    ssr: false,
-  },
+  () => import('@/shared/contexts/authentication-provider'),
+  { ssr: false },
 )
 
 const inter = Inter({ subsets: ['latin'] })
