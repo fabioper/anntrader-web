@@ -47,7 +47,7 @@ export default function HomePage() {
       </Head>
 
       <section className="container">
-        <h2 className="font-bold text-xl mb-5">Products</h2>
+        <h2 className="font-bold text-3xl mb-5">Products</h2>
 
         <div className="flex justify-between my-5">
           <form className="flex gap-2" onSubmit={searchProducts}>

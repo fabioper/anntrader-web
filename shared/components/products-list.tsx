@@ -49,7 +49,7 @@ function ProductsList({
   }
 
   return (
-    <div className="grid grid-cols-4 gap-5">
+    <div className="grid grid-cols-[repeat(auto-fill,minmax(300px,1fr))] gap-5">
       {products.map((product) => (
         <div
           key={product.id}
@@ -61,9 +61,10 @@ function ProductsList({
               alt={product.description}
               width={250}
               height={250}
-              className="w-full h-56 object-contain"
+              className="w-full h-56 object-cover"
             />
           )}
+
           <div className="flex justify-between items-center">
             <Link href={`/${product.id}`} className="hover:underline">
               <h3 className="font-bold">{product.name}</h3>
