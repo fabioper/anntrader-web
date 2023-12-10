@@ -6,17 +6,27 @@ import { PrimeReactProvider } from 'primereact/api'
 import 'primereact/resources/themes/soho-light/theme.css'
 import 'primeicons/primeicons.css'
 import Layout from '@/shared/layout/layout'
+import dynamic from 'next/dynamic'
+
+const AuthProvider = dynamic(
+  () => import('@/shared/contexts/AuthenticationProvider'),
+  {
+    ssr: false,
+  },
+)
 
 const inter = Inter({ subsets: ['latin'] })
 
 export default function MyApp({ Component, pageProps }: AppProps) {
   return (
     <div className={inter.className}>
-      <PrimeReactProvider>
-        <Layout>
-          <Component {...pageProps} />
-        </Layout>
-      </PrimeReactProvider>
+      <AuthProvider>
+        <PrimeReactProvider>
+          <Layout>
+            <Component {...pageProps} />
+          </Layout>
+        </PrimeReactProvider>
+      </AuthProvider>
     </div>
   )
 }

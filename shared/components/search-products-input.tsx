@@ -2,6 +2,7 @@ import { InputText } from 'primereact/inputtext'
 import { Button } from 'primereact/button'
 import React, { useCallback, useState } from 'react'
 import { useProducts } from '@/shared/contexts/products.context'
+import { PrimeIcons } from 'primereact/api'
 
 export default function SearchProductsInput() {
   const [search, setSearch] = useState('')
@@ -10,7 +11,7 @@ export default function SearchProductsInput() {
   const searchProducts = useCallback(
     async (event: React.FormEvent<HTMLFormElement>) => {
       event.preventDefault()
-      await setQuery(search)
+      setQuery(search)
     },
     [search, setQuery],
   )
@@ -23,9 +24,12 @@ export default function SearchProductsInput() {
         value={search}
         placeholder="Search product"
       />
-      <Button type="submit" size="small">
-        Search
-      </Button>
+      <Button
+        type="submit"
+        size="small"
+        icon={PrimeIcons.SEARCH}
+        severity="info"
+      />
     </form>
   )
 }

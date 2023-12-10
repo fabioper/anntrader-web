@@ -5,6 +5,7 @@ import { Button } from 'primereact/button'
 import SaveProductModal from '@/shared/components/save-product-modal'
 import ProductsProvider from '@/shared/contexts/products.context'
 import SearchProductsInput from '@/shared/components/search-products-input'
+import { PrimeIcons } from 'primereact/api'
 
 export default function HomePage() {
   const [modalVisible, setModalVisible] = useState(false)
@@ -26,9 +27,9 @@ export default function HomePage() {
               type="button"
               size="small"
               onClick={() => setModalVisible(true)}
-            >
-              Add product
-            </Button>
+              label="Add product"
+              icon={PrimeIcons.PLUS}
+            />
           </div>
 
           <ProductsList />
